@@ -13,6 +13,11 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Welcome Node + TS')
 });
 
+//Define Second Route
+app.get('/garden', (req: Request, res: Response) => {
+    res.send('Welcome GardenShoppy')
+});
+
 //Execute App
 app.listen(port, () => {
     console.log(`GardenShoppy Server: Running at http://localhost:${port}`
