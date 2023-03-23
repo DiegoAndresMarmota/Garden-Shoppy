@@ -10,7 +10,7 @@ const port: string | number = process.env.PORT || 8000;
 
 //Define First Route
 app.get('/', (req: Request, res: Response) => {
-    res.send('Welcome Node')
+    res.send('Welcome Node + TS')
 });
 
 //Execute App
