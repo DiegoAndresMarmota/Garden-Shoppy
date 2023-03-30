@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import helloRouter from './HelloRouter';
+import usersRouter from './UserRouter';
 import { LogInfo } from '../utils/logger';
 
 //Server Instance
@@ -18,5 +19,6 @@ rootRouter.get('/', (req: Request, res: Response) => {
 server.use('/', rootRouter); //http://localhost:8000/api/
 server.use('/hello', helloRouter); //http://localhost:8000/api/hello
 //Add more routes
+server.use('/users', usersRouter) //http://localhost:8000/api/users
 
 export default server;
