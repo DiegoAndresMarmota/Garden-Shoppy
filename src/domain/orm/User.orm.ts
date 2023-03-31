@@ -28,3 +28,18 @@ export const getUserByID = async (id: string): Promise<any> => {
 
     }
 }
+
+//Delete User
+export const deleteUserByID = async (id: string): Promise<any | undefined> => {
+    try {
+        const userModel = userEntity();
+
+        //Delete
+        return await userModel.deleteOne({ _id: id })
+
+    } catch (error) {
+
+        LogError(`[ORM ERROR]: Delete User by ID: ${error}`)
+
+    }
+}
