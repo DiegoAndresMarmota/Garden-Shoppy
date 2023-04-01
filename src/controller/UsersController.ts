@@ -1,9 +1,10 @@
-import { Get, Route, Tags, Query, Delete } from 'tsoa';
+import { Get, Route, Tags, Query, Delete, Post } from 'tsoa';
 import { IUserController } from './interfaces';
 import { LogSuccess, LogError, LogWarning } from '../utils/logger';
 
 //ORM - Users Collection
-import { getAllUsers, getUserByID, deleteUserByID } from '../domain/orm/User.orm';
+import { getAllUsers, getUserByID, deleteUserByID, createUser } from '../domain/orm/User.orm';
+import { create } from 'domain';
 
 @Route("/api/users")
 @Tags("UserController")
@@ -26,6 +27,12 @@ export class UserController implements IUserController {
         return response;
     }
 
+    /**
+     * EndPoint to delete the Users in the Collection "Users" of DB
+     * @param {string} id 
+     * @returns All User o User found by ID
+     */
+
     @Delete("/")
     public async deleteUser(@Query()id?: string): Promise<any> {
         
@@ -44,6 +51,25 @@ export class UserController implements IUserController {
                 message: "Please, provide a ID to delete"
             }
         }
+        return response;
+    }
+
+    /**
+     * EndPoint to create the Users in the Collection "Users" of DB
+     * @param {string} id 
+     * @returns All User o User found by ID
+     */
+    @Post("/")
+    public async createUser(user: any): Promise<any> {
+
+        const response: any = '';
+
+        await createUser(user).then((respo) => {
+            LogSuccess(`[/api/users] Create User: ${user}`);
+            response = {
+                message: `User ${user.name} created successfully`
+            }
+        })
         return response;
     }
 }
