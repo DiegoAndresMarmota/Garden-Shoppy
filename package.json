@@ -7,7 +7,7 @@
     "swagger": "tsoa spec",
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -x tsoa spec\" \"nodemon -q dist/index.js\"",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "jest",
     "serve:coverage": "npm run test && cd coverage/lcov-report && npx serve"
   },
