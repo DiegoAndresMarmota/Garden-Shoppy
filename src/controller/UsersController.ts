@@ -1,10 +1,9 @@
-import { Get, Route, Tags, Query, Delete, Post } from 'tsoa';
+import { Get, Route, Tags, Query, Delete, Post, Put } from 'tsoa';
 import { IUserController } from './interfaces';
 import { LogSuccess, LogError, LogWarning } from '../utils/logger';
 
 //ORM - Users Collection
-import { getAllUsers, getUserByID, deleteUserByID, createUser } from '../domain/orm/User.orm';
-import { create } from 'domain';
+import { getAllUsers, getUserByID, deleteUserByID, createUser, updateUserByID } from '../domain/orm/User.orm';
 
 @Route("/api/users")
 @Tags("UserController")
@@ -40,7 +39,7 @@ export class UserController implements IUserController {
 
         if (id) {
             LogSuccess(`[/api/users] Get User by ID: ${id}`);
-            await deleteUserByID(id).then((response: any) => {
+            await deleteUserByID(id).then((response) => {
                 response = {
                     message: `User By ID: ${id} deleted successfully`
                 }
@@ -64,12 +63,33 @@ export class UserController implements IUserController {
 
         const response: any = '';
 
-        await createUser(user).then((respo) => {
+        await createUser(user).then((response) => {
             LogSuccess(`[/api/users] Create User: ${user}`);
             response = {
                 message: `User ${user.name} created successfully`
             }
         })
+        return response;
+    }
+
+    @Put("/")
+    public async updateUser(@Query()id: string, user: any): Promise<any> {
+        
+        let response: any = '';
+
+        if (id) {
+            LogSuccess(`[/api/users] Update User by ID: ${id}`);
+            await updateUserByID(id, user).then((response) => {
+                response = {
+                    message: `User By ID: ${id} updated successfully`
+                }
+            })
+        } else {
+            LogWarning('[/api/users] Updated User By ID Request');
+            response = {
+                message: "Please, provide a ID to updated"
+            }
+        }
         return response;
     }
 }

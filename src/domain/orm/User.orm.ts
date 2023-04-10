@@ -59,3 +59,15 @@ export const createUser = async (user: any): Promise<any | undefined> => {
 
     }
 }
+
+//Update User
+export const updateUserByID = async (id:string, user: any): Promise<any | undefined> => {
+    try {
+        const userModel = userEntity();
+
+        return await userModel.findByIdAndUpdate(id, user);
+
+    } catch (error) {
+        LogError(`[ORM ERROR]: Update User ${id}: ${error}`);
+    }
+}
