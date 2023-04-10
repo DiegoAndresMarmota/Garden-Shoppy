@@ -21,6 +21,7 @@ usersRouter.route('/')
     })
     //DELETE:
     .delete(async (req: Request, res: Response) => { 
+        //Obtain a Query Param
         const id: any = req?.query?.id;
         LogInfo(`Query Param: ${id}`);
         //Controller Instance to execute method
@@ -48,6 +49,32 @@ usersRouter.route('/')
         const response: any = await controller.createUser(user);
         //Send to the client the response
         return res.send(response);
+    })
+    //PUT:
+    .put(async (req: Request, res: Response) => {
+        //Obtain a Query Param
+        const id: any = req?.query?.id;
+        const name: any = req?.query?.id;
+        const age: any = req?.query?.id;
+        const email: any = req?.query?.id;
+        LogInfo(`Query Param: ${id}, ${name}, ${age}, ${email}`);
+
+        //Controller Instance to execute method
+        const controller: UserController = new UserController();
+
+        //Obtain a Response
+        const user = {
+            name: name,
+            email: email,
+            age: age,
+        }
+
+        //Obtain a Response
+        const response: any = await controller.updateUser(id, user);
+
+        //Send to the client the response
+        return res.send(response);
+
     })
 
 //Export hello router

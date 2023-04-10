@@ -11,4 +11,6 @@ export interface IUserController {
     deleteUser(id?: string): Promise<any>
     //Create user from database
     createUser(user: any): Promise<any>
+    //Update user from database
+    updateUser(id:string, user:any): Promise<any>
 }
