@@ -1,5 +1,6 @@
 import { userEntity } from "../entities/User.entity";
 import { LogSuccess, LogError } from "../../utils/logger";
+import { IUser } from "../interfaces/IUser.interface";
 
 export const getAllUsers = async (): Promise<any[] | undefined> => {
     try {
@@ -70,4 +71,13 @@ export const updateUserByID = async (id:string, user: any): Promise<any | undefi
     } catch (error) {
         LogError(`[ORM ERROR]: Update User ${id}: ${error}`);
     }
+}
+
+//Login User
+
+
+//Register User
+export const registerUser = async (user: IUser): Promise<any | undefined> => {
+    
+
 }
