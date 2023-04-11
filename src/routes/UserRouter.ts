@@ -17,7 +17,7 @@ usersRouter.route('/')
         //Obtain a Response
         const response: any = await controller.getUsers(id)
         //Send to the client the response
-        return res.send(response);
+        return res.status(200).send(response);
     })
     //DELETE:
     .delete(async (req: Request, res: Response) => { 
@@ -29,7 +29,7 @@ usersRouter.route('/')
         //Obtain a Response
         const response: any = await controller.deleteUser(id)
         //Send to the client the response
-        return res.send(response);
+        return res.status(response.status).send(response);
     })
     //POST:
     .post(async (req: Request, res: Response) => {
@@ -48,7 +48,7 @@ usersRouter.route('/')
         }
         const response: any = await controller.createUser(user);
         //Send to the client the response
-        return res.send(response);
+        return res.status(201).send(response);
     })
     //PUT:
     .put(async (req: Request, res: Response) => {
@@ -73,7 +73,7 @@ usersRouter.route('/')
         const response: any = await controller.updateUser(id, user);
 
         //Send to the client the response
-        return res.send(response);
+        return res.status(response.status).send(response);
 
     })
 
