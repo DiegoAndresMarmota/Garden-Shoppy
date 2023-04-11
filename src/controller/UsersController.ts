@@ -41,12 +41,14 @@ export class UserController implements IUserController {
             LogSuccess(`[/api/users] Get User by ID: ${id}`);
             await deleteUserByID(id).then((response) => {
                 response = {
+                    status: 204,
                     message: `User By ID: ${id} deleted successfully`
                 }
             })
         } else {
             LogWarning('[/api/users] Delete Users By ID Request');
             response = {
+                status: 400,
                 message: "Please, provide a ID to delete"
             }
         }
