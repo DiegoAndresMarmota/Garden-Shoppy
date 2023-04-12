@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import helloRouter from './HelloRouter';
 import usersRouter from './UserRouter';
 import { LogInfo } from '../utils/logger';
+import authRouter from './AuthRouter';
 
 //Server Instance
 const server = express();
@@ -20,5 +21,8 @@ server.use('/', rootRouter); //http://localhost:8000/api/
 server.use('/hello', helloRouter); //http://localhost:8000/api/hello
 //Add more routes
 server.use('/users', usersRouter) //http://localhost:8000/api/users
+//Auth Routes
+server.use('/auth', authRouter); //http://localhost:8000/api/auth
+
 
 export default server;
