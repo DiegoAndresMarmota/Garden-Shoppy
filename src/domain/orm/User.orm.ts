@@ -1,6 +1,9 @@
 import { userEntity } from "../entities/User.entity";
 import { LogSuccess, LogError } from "../../utils/logger";
 import { IUser } from "../interfaces/IUser.interface";
+import { IAuth } from "../interfaces/IAuth.interface";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const getAllUsers = async (): Promise<any[] | undefined> => {
     try {
@@ -74,10 +77,49 @@ export const updateUserByID = async (id:string, user: any): Promise<any | undefi
 }
 
 //Login User
+export const loginUser = async (auth: IAuth): Promise<any | undefined> => {
+    try {
+        const userModel = userEntity();
 
+        //Find User by Email
+        userModel.findOne({ email: auth.email }, (error: any, user: IUser) => {
+            if (error) {
+                //Return Error
+            }
+            if (!user) {
+                //Return User not found
+            }
+
+            //Use Bcrypt
+            const validPassword = bcrypt.compareSync(auth.password, user.password);
+
+            if (!validPassword) {
+                //Not authorized
+            }
+
+            //Create JWT
+            const token = jwt.sign({ email: user.email }, 'SECRET', { expiresIn: "1h" })
+        });
+        return token;
+        
+} catch (error) {
+        LogError(`[ORM ERROR]: Creating user ${error}`);
+    }
+}
 
 //Register User
 export const registerUser = async (user: IUser): Promise<any | undefined> => {
-    
+    try {
+        const userModel = userEntity();
 
+        return await userModel.create(user);
+
+    } catch (error) {
+        LogError(`[ORM ERROR]: Register user ${error}`);
+    }
+}
+
+//Logout User
+export const logoutUser = async (): Promise<any | undefined> => {
+    // Pending
 }

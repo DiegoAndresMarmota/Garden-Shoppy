@@ -3,9 +3,6 @@ import { UserController } from '../controller/UsersController';
 import { LogInfo } from '../utils/logger';
 import { IUser } from '../domain/interfaces/IUser.interface';
 
-//BCrypt from password
-import  bcrypt from 'bcrypt';
-
 //Router from express
 const usersRouter = express.Router();
 
