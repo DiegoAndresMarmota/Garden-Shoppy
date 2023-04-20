@@ -6,6 +6,7 @@ import { IUser } from '../domain/interfaces/IUser.interface';
 
 //ORM - Users Collection
 import { registerUser, loginUser, logoutUser } from '../domain/orm/User.orm';
+import { AuthResponse, ErrorResponse } from './types';
 
 @Route("/api/auth")
 @Tags("AuthController")
@@ -38,23 +39,20 @@ export class AuthController implements IAuthController {
     @Post("/login")
     public async loginUser(auth: IAuth): Promise<any> {
 
-        let response: any = '';
+        let response: AuthResponse | ErrorResponse | undefined;
 
         if (auth) {
             LogSuccess(`[/api/auth/login] Register New User: ${auth.email} `);
-            await loginUser(auth).then((response) => {
-                LogSuccess(`[/api/auth/login] Login User: ${auth.email} `);
-                response = {
-                    message: `User ${auth.email} login successfully`,
-                    token: response.token
-                }
-            })
-            return response;
-
+            const data = await loginUser(auth);
+            response = {
+                token: data.token,
+                message: `Welcome, ${data.user.name}`
+            }
         } else {
             LogWarning('[/api/auth/login] Register needs email and password');
             response = {
                 message: 'Please, provide a new email for login',
+                error: ' Check aEmail or password'
             }
         }
         return response;
@@ -66,4 +64,4 @@ export class AuthController implements IAuthController {
 
         throw new Error(`[/api/auth/logout)
     }
-}
+    }

@@ -5,6 +5,16 @@ import { IAuth } from "../interfaces/IAuth.interface";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+//ENV
+import dotenv from 'dotenv';
+
+//Config ENV
+dotenv.config();
+
+//Obtain Secret Key
+const secret = process.env.SECRETKEY || 'MySecretKey';
+
+
 export const getAllUsers = async (): Promise<any[] | undefined> => {
     try {
         const userModel = userEntity();
@@ -81,28 +91,38 @@ export const loginUser = async (auth: IAuth): Promise<any | undefined> => {
     try {
         const userModel = userEntity();
 
-        //Find User by Email
-        userModel.findOne({ email: auth.email }, (error: any, user: IUser) => {
-            if (error) {
-                //Return Error
-            }
-            if (!user) {
-                //Return User not found
-            }
+        let userFound: IUser | undefined = undefined;
+        let token = undefined;
 
-            //Use Bcrypt
-            const validPassword = bcrypt.compareSync(auth.password, user.password);
-
-            if (!validPassword) {
-                //Not authorized
-            }
-
-            //Create JWT
-            const token = jwt.sign({ email: user.email }, 'SECRET', { expiresIn: "1h" })
-        });
-        return token;
+        //Check if user exists by email
+        await userModel.findOneAndUpdate({ email: auth.email })
+            .then((user: IUser) => {
+                userFound = user;
+            }).catch((error) => {
+                console.error(`Error: ${error}`);
+                throw new Error(`[Error]: ${error}`);
+            })
         
-} catch (error) {
+        //Check if password is correct
+        const validPassword = bcrypt.compareSync(auth.password, userFound!.password);
+        
+        if (!validPassword) {
+            console.error(`Error: ${error}`);
+            throw new Error(`[Password not valid]`);
+        }
+
+        //Generate JWT
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        token = jwt.sign({ email: userFound!.email }, secret, {
+            expiresIn: "1h"
+        });
+
+        return {
+            user: userFound,
+            token: token,
+        }
+        
+    } catch (error) {
         LogError(`[ORM ERROR]: Creating user ${error}`);
     }
 }
