@@ -21,7 +21,8 @@ const authRouter = express.Router();
 authRouter.route('/register')
     .post(jsonParser, async (req: Request, res: Response) => {
         
-        let { name, email, password, age } = req.body;
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        const { name, email, password, age } = req?.body;
         let hashedPassword = '';
         
         if (name && password && email && age) {
