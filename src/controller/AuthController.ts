@@ -17,9 +17,9 @@ export class AuthController implements IAuthController {
         let response: any = '';
 
         if (user) {
-            LogSuccess(`[/api/auth/register] Register New User: ${user} `);
+            LogSuccess(`[/api/auth/register] Register New User: ${user.email} `);
             await registerUser(user).then((response) => {
-            LogSuccess(`[/api/auth/register] Create User: ${user}`);
+            LogSuccess(`[/api/auth/register] Create User: ${user.email}`);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             response = {
                 message: `User ${user.name} created successfully`

@@ -50,9 +50,10 @@ authRouter.route('/register')
 
 
 authRouter.route('/login') 
-    .post(async (req: Request, res: Response) => {
+    .post(jsonParser, async (req: Request, res: Response) => {
         
-        const { email, password } = req.body;
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        const { email, password } = req?.body;
         
         if (email && password) {
             
@@ -65,10 +66,16 @@ authRouter.route('/login')
             }
 
             //Obtain a Response
-            const response: any = await controller.loginUser({email, password});
+            const response: any = await controller.loginUser(auth);
 
             //Send to the client the response
             return res.status(200).send(response);
+
+        } else {
+            //Send to the client the response
+            return res.status(400).send({
+                message: "[ERROR - User Data Missing: No user can be registered "
+            });
 
         }
 
