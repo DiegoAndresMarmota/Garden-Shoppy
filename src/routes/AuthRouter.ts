@@ -4,28 +4,32 @@ import { IUser } from '../domain/interfaces/IUser.interface';
 import { IAuth } from '../domain/interfaces/IAuth.interface';
 
 //BCrypt from password
-import  bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
+//Middleware
+import { verifyToken } from "src/middlewares/verifyToken.middleware";
+
+//Body Parser
+import bodyParser from "body-parser";
+
+//Middleware to read JSON in body
+const jsonParser = bodyParser.json();
 
 //Router from express
 const authRouter = express.Router();
 
-authRouter.route('/auth/register')
-    .post(async (req: Request, res: Response) => {
+authRouter.route('/register')
+    .post(jsonParser, async (req: Request, res: Response) => {
         
+        let { name, email, password, age } = req.body;
         let hashedPassword = '';
         
-        if (req.body.password && req.body.password && req.body.email && req.body.age) {
-
-            const name = req.body.name
-            const email = req.body.email
-            const age = req.body.age
-
+        if (name && password && email && age) {
             //Obtain the password
             hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
+            
             const newUser: IUser = {
-                name : name,
+                name: name,
                 email: email,
                 password: hashedPassword,
                 age: age
@@ -41,11 +45,10 @@ authRouter.route('/auth/register')
             return res.status(200).send(response);
 
         }
-
     })
 
 
-authRouter.route('/auth/login') 
+authRouter.route('/login') 
     .post(async (req: Request, res: Response) => {
         
         const { email, password } = req.body;
