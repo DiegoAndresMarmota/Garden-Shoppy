@@ -5,7 +5,8 @@ import { IAuth } from '../domain/interfaces/IAuth.interface';
 import { IUser } from '../domain/interfaces/IUser.interface';
 
 //ORM - Users Collection
-import { registerUser, loginUser, logoutUser } from '../domain/orm/User.orm';
+import { registerUser, loginUser, logoutUser, getUserByID } from '../domain/orm/User.orm';
+import { AuthResponse, ErrorResponse } from './types';
 
 @Route("/api/auth")
 @Tags("AuthController")
@@ -17,9 +18,9 @@ export class AuthController implements IAuthController {
         let response: any = '';
 
         if (user) {
-            LogSuccess(`[/api/auth/register] Register New User: ${user} `);
+            LogSuccess(`[/api/auth/register] Register New User: ${user.email} `);
             await registerUser(user).then((response) => {
-            LogSuccess(`[/api/auth/register] Create User: ${user}`);
+            LogSuccess(`[/api/auth/register] Create User: ${user.email}`);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             response = {
                 message: `User ${user.name} created successfully`
@@ -38,32 +39,45 @@ export class AuthController implements IAuthController {
     @Post("/login")
     public async loginUser(auth: IAuth): Promise<any> {
 
-        let response: any = '';
+        let response: AuthResponse | ErrorResponse | undefined;
 
         if (auth) {
             LogSuccess(`[/api/auth/login] Register New User: ${auth.email} `);
-            await loginUser(auth).then((response) => {
-                LogSuccess(`[/api/auth/login] Login User: ${auth.email} `);
-                response = {
-                    message: `User ${auth.email} login successfully`,
-                    token: response.token
-                }
-            })
-            return response;
-
+            const data = await loginUser(auth);
+            response = {
+                token: data.token,
+                message: `Welcome, ${data.user.name}`
+            }
         } else {
             LogWarning('[/api/auth/login] Register needs email and password');
             response = {
                 message: 'Please, provide a new email for login',
+                error: ' Check aEmail or password'
             }
         }
         return response;
     }
-    
-    @Post("/logout")
-    public async logoutUser(): Promise < any > {
-        const response: any = '',
 
-        throw new Error(`[/api/auth/logout)
+    @Get("/me")
+    public async userData(@Query() id?: string): Promise<any> {
+        
+        let response: any = '';
+
+        if (id) {
+            LogSuccess(`[/api/users] Get UserData by ID: ${id}`);
+            response = await getUserByID(id);
+
+            //Remove password after return
+            response.password = '';
+        }
+
+        return response;
     }
-}
+    
+    // @Post("/logout")
+    // public async logoutUser(): Promise < any > {
+    //     const response: any = '',
+
+    //     throw new Error(`[/api/auth/logout)
+    // }
+    // }

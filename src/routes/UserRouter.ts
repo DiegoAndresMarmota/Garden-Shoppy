@@ -2,9 +2,13 @@ import express, { Request, Response } from 'express';
 import { UserController } from '../controller/UsersController';
 import { LogInfo } from '../utils/logger';
 import { IUser } from '../domain/interfaces/IUser.interface';
+//Body Parser 
+import bodyParser from 'body-parser';
 
 //Router from express
 const usersRouter = express.Router();
+
+const jsonParser = bodyParser.json();
 
 //http://localhost:8000/api/users?id=123
 usersRouter.route('/')
@@ -32,25 +36,7 @@ usersRouter.route('/')
         //Send to the client the response
         return res.status(response.status).send(response);
     })
-    //POST:
-    .post(async (req: Request, res: Response) => {
-
-        const name: any = req?.query?.name;
-        const email: any = req?.query?.email;
-        const age: any = req?.query?.age;
-
-       //Controller Instance to execute method
-        const controller: UserController = new UserController();
-        //Obtain a Response
-        const user = {
-            name: name || "default name",
-            email: email || 'undefault@gmail.com',
-            age: age || "No age specified",
-        }
-        const response: any = await controller.createUser(user);
-        //Send to the client the response
-        return res.status(201).send(response);
-    })
+    
     //PUT:
     .put(async (req: Request, res: Response) => {
         //Obtain a Query Param
