@@ -36,28 +36,7 @@ usersRouter.route('/')
         //Send to the client the response
         return res.status(response.status).send(response);
     })
-    //POST:
-    .post(jsonParser, async (req: Request, res: Response) => {
-
-        const name: any = req?.query?.name;
-        const email: any = req?.query?.email;
-        const age: any = req?.query?.age;
-
-        const name2: any = req?.body?.name;
-        LogInfo(`Name: ${name2}`)
-
-       //Controller Instance to execute method
-        const controller: UserController = new UserController();
-        //Obtain a Response
-        const user = {
-            name: name || "default name",
-            email: email || 'undefault@gmail.com',
-            age: age || "No age specified",
-        }
-        const response: any = await controller.createUser(user);
-        //Send to the client the response
-        return res.status(201).send(response);
-    })
+    
     //PUT:
     .put(async (req: Request, res: Response) => {
         //Obtain a Query Param
