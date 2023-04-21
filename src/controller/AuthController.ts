@@ -5,7 +5,7 @@ import { IAuth } from '../domain/interfaces/IAuth.interface';
 import { IUser } from '../domain/interfaces/IUser.interface';
 
 //ORM - Users Collection
-import { registerUser, loginUser, logoutUser } from '../domain/orm/User.orm';
+import { registerUser, loginUser, logoutUser, getUserByID } from '../domain/orm/User.orm';
 import { AuthResponse, ErrorResponse } from './types';
 
 @Route("/api/auth")
@@ -57,11 +57,24 @@ export class AuthController implements IAuthController {
         }
         return response;
     }
-    
-    @Post("/logout")
-    public async logoutUser(): Promise < any > {
-        const response: any = '',
 
-        throw new Error(`[/api/auth/logout)
+    @Get("/me")
+    public async userData(@Query() id?: string): Promise<any> {
+        
+        let response: any = '';
+
+        if (id) {
+            LogSuccess(`[/api/users] Get UserData by ID: ${id}`);
+            response = await getUserByID(id);
+        }
+
+        return response;
     }
-    }
+    
+    // @Post("/logout")
+    // public async logoutUser(): Promise < any > {
+    //     const response: any = '',
+
+    //     throw new Error(`[/api/auth/logout)
+    // }
+    // }

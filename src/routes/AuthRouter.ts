@@ -81,6 +81,28 @@ authRouter.route('/login')
 
     })
 
+//Route Protected by Verify token middleware
+authRouter.route('/me')
+    .get(verifyToken, async (req: Request, res: Response) => {
+        //Obtain the ID of user
+        const id: any = req?.query?.id;
+
+        if (id) {
+            //Controller: Auth Controller
+            const controller: AuthController = new AuthController();
+
+            //Obtain the response fron Controller
+            const response: any = await controller.userData(id)
+
+            //If user is authorizaded:
+            return res.status(200).send(response);
+
+        } else {
+            return res.status(401).send({
+                message: "Invalid authorization",
+            })
+        }
+    })
 
 //Export hello router
 export default authRouter;

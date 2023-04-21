@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 
 //ENV
 import dotenv from 'dotenv';
+import { error } from "console";
 
 //Config ENV
 dotenv.config();
