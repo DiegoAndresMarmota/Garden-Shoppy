@@ -16,12 +16,22 @@ dotenv.config();
 const secret = process.env.SECRETKEY || 'MySecretKey';
 
 
-export const getAllUsers = async (): Promise<any[] | undefined> => {
+export const getAllUsers = async (page: number, limit: number): Promise<any[] | undefined> => {
     try {
         const userModel = userEntity();
 
+        const response: any = {};
+
+        //Search all users
+        await userModel.find({ isDeleted: false })
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .exec().then((users: IUser[]) => {
+                response.users = users;
+            });
+
         //Search for users
-        return await userModel.find({ isDelete: false })
+        // return await userModel.find({ isDelete: false })
 
     } catch (error) {
         LogError(`[ORM ERROR]: Getting All Users: ${error}`)

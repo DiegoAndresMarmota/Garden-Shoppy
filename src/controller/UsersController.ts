@@ -12,7 +12,7 @@ export class UserController implements IUserController {
      * EndPoint to retrieve users
      */
     @Get("/")
-    public async getUsers(@Query() id?: string): Promise<any> {
+    public async getUsers(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
         
         let response: any = '';
 
@@ -25,7 +25,7 @@ export class UserController implements IUserController {
             
         } else {
             LogSuccess('[/api/users] Get All Users Request');
-            response = await getAllUsers();
+            response = await getAllUsers(page, limit);
         }
         return response;
     }
