@@ -1,4 +1,4 @@
-import { IUser } from "../domain/interfaces/IUser.interface";
+import { IUser } from "../../domain/interfaces/IUser.interface";
 import { BasicResponse } from "../types";
 
 export interface IHelloController {
@@ -7,7 +7,7 @@ export interface IHelloController {
 
 export interface IUserController {
     //Users from database
-    getUsers(id?: string): Promise<any>
+    getUsers(page: number, limit: number, id?: string): Promise<any>
     //Delete users from database
     deleteUser(id?: string): Promise<any>
     //Update user from database

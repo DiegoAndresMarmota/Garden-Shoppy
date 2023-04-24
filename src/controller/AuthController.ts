@@ -68,7 +68,7 @@ export class AuthController implements IAuthController {
             response = await getUserByID(id);
 
             //Remove password after return
-            response.password = '';
+            // response.password = '';
         }
 
         return response;
@@ -79,5 +79,4 @@ export class AuthController implements IAuthController {
     //     const response: any = '',
 
     //     throw new Error(`[/api/auth/logout)
-    // }
     // }
