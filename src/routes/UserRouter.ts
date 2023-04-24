@@ -4,6 +4,7 @@ import { LogInfo } from '../utils/logger';
 import { IUser } from '../domain/interfaces/IUser.interface';
 //Body Parser 
 import bodyParser from 'body-parser';
+import { verifyToken } from '../middlewares/verifyToken.middleware';
 
 //Router from express
 const usersRouter = express.Router();
@@ -13,7 +14,7 @@ const jsonParser = bodyParser.json();
 //http://localhost:8000/api/users?id=123
 usersRouter.route('/')
     // GET:
-    .get(async (req: Request, res: Response) => {
+    .get(verifyToken, async (req: Request, res: Response) => {
         //Obtain a Query Param
         const id: any = req?.query?.id;
         LogInfo(`Query Param: ${id}`);
@@ -25,7 +26,7 @@ usersRouter.route('/')
         return res.status(200).send(response);
     })
     //DELETE:
-    .delete(async (req: Request, res: Response) => { 
+    .delete(verifyToken, async (req: Request, res: Response) => { 
         //Obtain a Query Param
         const id: any = req?.query?.id;
         LogInfo(`Query Param: ${id}`);
@@ -38,7 +39,7 @@ usersRouter.route('/')
     })
     
     //PUT:
-    .put(async (req: Request, res: Response) => {
+    .put(verifyToken, async (req: Request, res: Response) => {
         //Obtain a Query Param
         const id: any = req?.query?.id;
         const name: any = req?.query?.id;
