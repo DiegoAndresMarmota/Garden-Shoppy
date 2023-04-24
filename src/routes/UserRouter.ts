@@ -17,13 +17,23 @@ usersRouter.route('/')
     .get(verifyToken, async (req: Request, res: Response) => {
         //Obtain a Query Param
         const id: any = req?.query?.id;
+
+        //Pagination
+        const page: any = req?.query?.page || 1;
+        const limit: any = req?.query?.id  || 6;
+
+        //Message Success
         LogInfo(`Query Param: ${id}`);
+
         //Controller Instance to execute method
         const controller: UserController = new UserController();
+
         //Obtain a Response
-        const response: any = await controller.getUsers(id)
+        const response: any = await controller.getUsers(page, limit, id )
+
         //Send to the client the response
         return res.status(200).send(response);
+
     })
     //DELETE:
     .delete(verifyToken, async (req: Request, res: Response) => { 

@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 //ENV
 import dotenv from 'dotenv';
 import { error } from "console";
+import { UserResponse } from "../types/UsersResponse.type";
 
 //Config ENV
 dotenv.config();
@@ -24,14 +25,21 @@ export const getAllUsers = async (page: number, limit: number): Promise<any[] | 
 
         //Search all users
         await userModel.find({ isDeleted: false })
+            .select('name email age')
             .limit(limit)
             .skip((page - 1) * limit)
+            // .projection({name: 1, email: 1, age: 1})
             .exec().then((users: IUser[]) => {
                 response.users = users;
             });
+        
+        //pagination
+        await userModel.countDocuments().then((total: number) => {
+            response.totalPages = Math.ceil(total / limit);
+            response.currentPage = page;
+        });
 
-        //Search for users
-        // return await userModel.find({ isDelete: false })
+        return response;
 
     } catch (error) {
         LogError(`[ORM ERROR]: Getting All Users: ${error}`)
@@ -45,7 +53,7 @@ export const getUserByID = async (id: string): Promise<any> => {
         const userModel = userEntity();
 
         //Search for users by ID
-        return await userModel.findById(id)
+        return await userModel.findById(id).select('name email age');
 
     } catch (error) {
 
