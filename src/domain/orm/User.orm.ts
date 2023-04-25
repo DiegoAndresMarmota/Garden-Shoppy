@@ -46,6 +46,7 @@ export const getAllUsers = async (page: number, limit: number): Promise<any[] | 
     }
 }
 
+
 //Get User By ID
 export const getUserByID = async (id: string): Promise<any> => {
     
@@ -62,6 +63,7 @@ export const getUserByID = async (id: string): Promise<any> => {
     }
 }
 
+
 //Delete User
 export const deleteUserByID = async (id: string): Promise<any | undefined> => {
     try {
@@ -77,21 +79,6 @@ export const deleteUserByID = async (id: string): Promise<any | undefined> => {
     }
 }
 
-//Create User
-export const createUser = async (user: any): Promise<any | undefined> => {
-    try {
-        
-        const userModel = userEntity();
-
-        //Create
-        return await userModel.create(user);
-
-    } catch (error) {
-
-        LogError(`[ORM ERROR]: Creating User by ID: ${error}`);
-
-    }
-}
 
 //Update User
 export const updateUserByID = async (id:string, user: any): Promise<any | undefined> => {
@@ -104,6 +91,7 @@ export const updateUserByID = async (id:string, user: any): Promise<any | undefi
         LogError(`[ORM ERROR]: Update User ${id}: ${error}`);
     }
 }
+
 
 //Login User
 export const loginUser = async (auth: IAuth): Promise<any | undefined> => {
@@ -146,6 +134,7 @@ export const loginUser = async (auth: IAuth): Promise<any | undefined> => {
     }
 }
 
+
 //Register User
 export const registerUser = async (user: IUser): Promise<any | undefined> => {
     try {
@@ -157,6 +146,7 @@ export const registerUser = async (user: IUser): Promise<any | undefined> => {
         LogError(`[ORM ERROR]: Register user ${error}`);
     }
 }
+
 
 //Logout User
 export const logoutUser = async (): Promise<any | undefined> => {
