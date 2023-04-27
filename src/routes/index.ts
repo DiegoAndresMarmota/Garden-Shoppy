@@ -3,6 +3,7 @@ import helloRouter from './HelloRouter';
 import usersRouter from './UserRouter';
 import { LogInfo } from '../utils/logger';
 import authRouter from './AuthRouter';
+import relationsRouter from './RelationsRouter';
 
 //Server Instance
 const server = express();
@@ -23,6 +24,7 @@ server.use('/hello', helloRouter); //http://localhost:8000/api/hello
 server.use('/users', usersRouter) //http://localhost:8000/api/users
 //Auth Routes
 server.use('/auth', authRouter); //http://localhost:8000/api/auth
-
+//Relation Routes
+server.use('/relation', relationsRouter) //http://localhost:8000/api/relation --> RelationsRouter
 
 export default server;
