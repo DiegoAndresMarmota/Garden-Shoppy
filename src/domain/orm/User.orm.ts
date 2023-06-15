@@ -9,6 +9,8 @@ import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
 import { error } from "console";
 import { UserResponse } from "../types/UsersResponse.type";
+import { relationEntity } from "../entities/Relation.entity";
+import { IRelation } from "../interfaces/IRelation.interface";
 
 //Config ENV
 dotenv.config();
@@ -25,6 +27,7 @@ export const getAllUsers = async (page: number, limit: number): Promise<any[] | 
 
         //Search all users
         await userModel.find({ isDeleted: false })
+            .select('name email age relations')
             .limit(limit)
             .skip((page - 1) * limit)
             // .projection({name: 1, email: 1, age: 1})
@@ -45,6 +48,37 @@ export const getAllUsers = async (page: number, limit: number): Promise<any[] | 
     }
 }
 
+export const getRelationsFromUser = async (id: string, page: number, limit: number): Promise<any[] | undefined> => {
+    try {
+
+        const userModel = userEntity();
+        const relationsModel = relationEntity();
+        let relationsFound: IRelation[] = [];
+
+        const response: any = {};
+
+        userModel.findById(id).then((user: IUser) => {
+
+            response.user.name = user.name;
+            response.user.email = user.email;
+
+            relationsModel.find({ "_id": { "$in": user.relations } }).then((relations: IRelation[]) => {
+
+                relationsFound = relations;
+            })
+
+        }).catch((error) => {
+            LogError(`[ORM ERROR]: Getting User from Relations: ${error}`);
+        })
+
+        return response;
+    
+    } catch (error) {
+        LogError(`[ORM ERROR]: Getting All Users: ${error}`)
+    }
+
+}
+
 
 //Get User By ID
 export const getUserByID = async (id: string): Promise<any> => {
@@ -53,7 +87,7 @@ export const getUserByID = async (id: string): Promise<any> => {
         const userModel = userEntity();
 
         //Search for users by ID
-        return await userModel.findById(id).select('name email age');
+        return await userModel.findById(id).select('name email age relations');
 
     } catch (error) {
 
