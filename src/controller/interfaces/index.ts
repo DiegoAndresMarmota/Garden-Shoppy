@@ -9,12 +9,14 @@ export interface IHelloController {
 
 
 export interface IUserController {
-    //Users from database
+    //Get Users from database
     getUsers(page: number, limit: number, id?: string): Promise<any>
+    //Get Relations of User from database
+    getRelations(page: number, limit: number, id?: string): Promise<any>
     //Delete users from database
     deleteUser(id?: string): Promise<any>
     //Update user from database
-    updateUser(id:string, user:any): Promise<any>
+    updateUser(id: string, user: any): Promise<any>
 }
 
 
@@ -27,16 +29,16 @@ export interface IAuthController {
 
 
 export interface IRelationController {
-
     //Read all relations from database || get Relation By ID
     getRelation(page: number, limit: number, id?: string): Promise<any>
+    //Get all Relations from database
+
+
 
     //Create a new relation from database
     createRelation(relation: IRelation): Promise<any>
-
     //Delete relations from database
     deleteRelation(id?: string): Promise<any>
-
     //Update relations from database
     updateRelation(id:string, relation:IRelation): Promise<any>
 }

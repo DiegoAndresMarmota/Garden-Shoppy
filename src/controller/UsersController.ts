@@ -9,9 +9,11 @@ import { IUser } from '@/domain/interfaces/IUser.interface';
 @Route("/api/users")
 @Tags("UserController")
 export class UserController implements IUserController {
+    
     /**
      * EndPoint to retrieve users
      */
+
     @Get("/")
     public async getUsers(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
         
@@ -26,6 +28,24 @@ export class UserController implements IUserController {
             
         } else {
             LogSuccess('[/api/users] Get All Users Request');
+            response = await getAllUsers(page, limit);
+        }
+        return response;
+    }
+
+    /**
+     * EndPoint Get/relations
+     */
+
+    @Get("/relations")
+    public async getRelations(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
+        let response: any = '';
+
+        if (id) {
+            LogSuccess(`[/api/users] Get Relations of User by ID: ${id}`);
+            response = await getUserByID(id);
+        } else {
+            LogSuccess('[/api/users] Get All Relations of User Request');
             response = await getAllUsers(page, limit);
         }
         return response;
