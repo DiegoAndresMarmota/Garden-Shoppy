@@ -35,6 +35,13 @@ usersRouter.route('/')
         return res.status(200).send(response);
 
     })
+
+    //http://localhost:8000/api/users?id=123
+    usersRouter.route('/relations')
+        
+    //PENDIENTE
+
+
     //DELETE:
     .delete(verifyToken, async (req: Request, res: Response) => { 
         //Obtain a Query Param
@@ -93,7 +100,8 @@ usersRouter.route('/auth/register')
                 name : name,
                 email: email,
                 password: hashedPassword,
-                age: age
+                age: age,
+                relations: []
             }
 
             //Controller Instance to execute method
