@@ -16,6 +16,6 @@ export const relationEntity = () => {
         }
     );
 
-    return mongoose.models.Users || mongoose.model<IRelation>('Relation', relationSchema);
+    return mongoose.models.Relation || mongoose.model<IRelation>('Relations', relationSchema);
 
 };

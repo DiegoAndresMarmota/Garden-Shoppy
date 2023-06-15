@@ -25,7 +25,6 @@ export const getAllUsers = async (page: number, limit: number): Promise<any[] | 
 
         //Search all users
         await userModel.find({ isDeleted: false })
-            .select('name email age')
             .limit(limit)
             .skip((page - 1) * limit)
             // .projection({name: 1, email: 1, age: 1})
@@ -147,6 +146,17 @@ export const registerUser = async (user: IUser): Promise<any | undefined> => {
     }
 }
 
+//Create User
+export const createUser = async (user: IUser): Promise<any | undefined> => {
+    try {
+        const userModel = userEntity();
+
+        return await userModel.create(user);
+
+    } catch (error) {
+        LogError(`[ORM ERROR]: Creating user ${error}`);
+    }
+}
 
 //Logout User
 export const logoutUser = async (): Promise<any | undefined> => {

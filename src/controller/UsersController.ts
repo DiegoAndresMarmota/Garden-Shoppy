@@ -3,14 +3,17 @@ import { IUserController } from './interfaces';
 import { LogSuccess, LogError, LogWarning } from '../utils/logger';
 
 //ORM - Users Collection
-import { getAllUsers, getUserByID, deleteUserByID, updateUserByID } from '../domain/orm/User.orm';
+import { getAllUsers, getUserByID, deleteUserByID, updateUserByID, createUser } from '../domain/orm/User.orm';
+import { IUser } from '@/domain/interfaces/IUser.interface';
 
 @Route("/api/users")
 @Tags("UserController")
 export class UserController implements IUserController {
+    
     /**
      * EndPoint to retrieve users
      */
+
     @Get("/")
     public async getUsers(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
         
@@ -25,6 +28,24 @@ export class UserController implements IUserController {
             
         } else {
             LogSuccess('[/api/users] Get All Users Request');
+            response = await getAllUsers(page, limit);
+        }
+        return response;
+    }
+
+    /**
+     * EndPoint Get/relations
+     */
+
+    @Get("/relations")
+    public async getRelations(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
+        let response: any = '';
+
+        if (id) {
+            LogSuccess(`[/api/users] Get Relations of User by ID: ${id}`);
+            response = await getUserByID(id);
+        } else {
+            LogSuccess('[/api/users] Get All Relations of User Request');
             response = await getAllUsers(page, limit);
         }
         return response;
@@ -61,7 +82,7 @@ export class UserController implements IUserController {
 
 
     @Put("/")
-    public async updateUser(@Query()id: string, user: any): Promise<any> {
+    public async updateUser(@Query()id: string, user: IUser): Promise<any> {
         
         let response: any = '';
 
@@ -76,6 +97,29 @@ export class UserController implements IUserController {
             LogWarning('[/api/users] Updated User By ID Request');
             response = {
                 message: "Please, provide a ID to updated"
+            }
+        }
+        return response;
+    }
+
+
+    @Post("/")
+    public async createUser(user: IUser): Promise<any> {
+        let response: any = '';
+
+        if (user) {
+            LogSuccess(`[/api/users] Create New User: ${user.name} `);
+            await createUser(user).then((response) => {
+                LogSuccess(`[/api/users] Create User: ${user.name}`);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                response = {
+                    message: `User ${user.name} created successfully`
+                }
+            });
+        } else {
+            LogWarning('[/api/users] Create needs new user');
+            response = {
+                message: 'Please, provide a new user',
             }
         }
         return response;
