@@ -3,7 +3,7 @@ import { IUserController } from './interfaces';
 import { LogSuccess, LogError, LogWarning } from '../utils/logger';
 
 //ORM - Users Collection
-import { getAllUsers, getUserByID, deleteUserByID, updateUserByID, createUser } from '../domain/orm/User.orm';
+import { getAllUsers, getUserByID, deleteUserByID, updateUserByID, createUser, getRelationsFromUser } from '../domain/orm/User.orm';
 import { IUser } from '@/domain/interfaces/IUser.interface';
 
 @Route("/api/users")
@@ -38,15 +38,17 @@ export class UserController implements IUserController {
      */
 
     @Get("/relations")
-    public async getRelations(@Query()page: number, @Query()limit: number, @Query()id?: string): Promise<any> {
+    public async getRelations(@Query()page: string, @Query()limit: number, @Query()id: string): Promise<any> {
         let response: any = '';
 
         if (id) {
-            LogSuccess(`[/api/users] Get Relations of User by ID: ${id}`);
-            response = await getUserByID(id);
+            LogSuccess(`[/api/users/relations] Get Relations of User by ID: ${id}`);
+            response = await getRelationsFromUser(page, limit, id);
         } else {
-            LogSuccess('[/api/users] Get All Relations of User Request');
-            response = await getAllUsers(page, limit);
+            LogSuccess('[/api/users/relations] Get All Relations of User no Request');
+            response = {
+                message: 'Please, provide a ID to get relations',
+            }
         }
         return response;
     }
