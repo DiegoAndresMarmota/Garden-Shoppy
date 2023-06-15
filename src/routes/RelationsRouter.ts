@@ -69,7 +69,7 @@ relationsRouter.route('/')
         const solution: number = req?.body?.solution || 0;
         const participants: string[] = req?.body?.participants || [];
 
-        if (name && description && level && intents && starts && creator && solution && participants) {
+        if (name && description && level && intents >=0 && starts >=0 && creator && solution && participants.length >=0) {
             //Controller Instance to execute method
             const controller: RelationsController = new RelationsController();
 
