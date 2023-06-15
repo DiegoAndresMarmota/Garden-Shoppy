@@ -20,13 +20,12 @@ export class AuthController implements IAuthController {
         if (user) {
             LogSuccess(`[/api/auth/register] Register New User: ${user.email} `);
             await registerUser(user).then((response) => {
-            LogSuccess(`[/api/auth/register] Create User: ${user.email}`);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            response = {
-                message: `User ${user.name} created successfully`
-            }
-        })
-        return response;
+                LogSuccess(`[/api/auth/register] Create User: ${user.email}`);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                response = {
+                    message: `User ${user.name} created successfully`
+                }
+            });
         } else {
             LogWarning('[/api/auth/register] Register needs new user');
             response = {
@@ -42,17 +41,17 @@ export class AuthController implements IAuthController {
         let response: AuthResponse | ErrorResponse | undefined;
 
         if (auth) {
-            LogSuccess(`[/api/auth/login] Register New User: ${auth.email} `);
+            LogSuccess(`[/api/auth/login] Login User: ${auth.email} `);
             const data = await loginUser(auth);
             response = {
                 token: data.token,
                 message: `Welcome, ${data.user.name}`
             }
         } else {
-            LogWarning('[/api/auth/login] Register needs email and password');
+            LogWarning('[/api/auth/login] Login needs email and password');
             response = {
                 message: 'Please, provide a new email for login',
-                error: ' Check aEmail or password'
+                error: ' Check a email or password'
             }
         }
         return response;
@@ -79,4 +78,5 @@ export class AuthController implements IAuthController {
     //     const response: any = '',
 
     //     throw new Error(`[/api/auth/logout)
-    // }
+    // 
+}
