@@ -5,5 +5,5 @@ export interface IUser {
     email: string,
     password: string,
     age: number,
-    relations: IRelation[]
+    relations: string[]
 }

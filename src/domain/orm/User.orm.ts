@@ -11,6 +11,7 @@ import { error } from "console";
 import { UserResponse } from "../types/UsersResponse.type";
 import { relationEntity } from "../entities/Relation.entity";
 import { IRelation } from "../interfaces/IRelation.interface";
+import mongoose from "mongoose";
 
 //Config ENV
 dotenv.config();
@@ -53,30 +54,40 @@ export const getRelationsFromUser = async (id: string, page: number, limit: numb
 
         const userModel = userEntity();
         const relationsModel = relationEntity();
+    
         let relationsFound: IRelation[] = [];
 
-        const response: any = {};
+        const response: any = {
+            relations: []
+        };
 
-        userModel.findById(id).then((user: IUser) => {
+        await userModel.findById(id).then(async (user: IUser) => {
 
-            response.user.name = user.name;
-            response.user.email = user.email;
+            response.user = user.email;
 
-            relationsModel.find({ "_id": { "$in": user.relations } }).then((relations: IRelation[]) => {
+            //Create search
+            const objectIds: mongoose.Types.ObjectId[] = [];
+            user.relations.forEach((relationID: string) => {
+                const objectID = new mongoose.Types.ObjectId(relationID);
+                objectIds.push(objectID);
 
-                relationsFound = relations;
-            })
+                
+                await relationsModel.find({ "_id": { "$in": objectIds } }).then((relations: IRelation[]) => {
+                    relationsFound = relations;
+                });
 
-        }).catch((error) => {
-            LogError(`[ORM ERROR]: Getting User from Relations: ${error}`);
-        })
+            }) catch ((error: any) => {
+                LogError(`[ORM ERROR]: Getting User from Relations: ${error}`);
+            });
 
-        return response;
-    
-    } catch (error) {
-        LogError(`[ORM ERROR]: Getting All Users: ${error}`)
+            response.relations = relationsFound;
+
+            return response;
+
+            } catch (error) {
+                LogError(`[ORM ERROR]: Getting Relations all Users: ${error}`);
+        }
     }
-
 }
 
 
@@ -110,6 +121,7 @@ export const deleteUserByID = async (id: string): Promise<any | undefined> => {
         LogError(`[ORM ERROR]: Delete User by ID: ${error}`)
 
     }
+}
 }
 
 
