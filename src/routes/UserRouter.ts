@@ -37,9 +37,25 @@ usersRouter.route('/')
     })
 
     //http://localhost:8000/api/users?id=123
-    usersRouter.route('/relations')
-        
-    //PENDIENTE
+usersRouter.route('/relations')
+    // GET:
+    .get(verifyToken, async (req: Request, res: Response) => {
+        //Obtain a Query Param
+        const id: any = req?.query?.id;
+
+        //Pagination
+        const page: any = req?.query?.page || 1;
+        const limit: any = req?.query?.id || 6;
+
+        //Controller Instance to execute method
+        const controller: UserController = new UserController();
+
+        //Obtain a Response
+        const response: any = await controller.getRelations(page, limit, id)
+
+        //Send to the client the response
+        return res.status(200).send(response);
+    })
 
 
     //DELETE:
